@@ -1,17 +1,20 @@
 ﻿
 using Bulky.Data.Models;
 using Bulky.infrastructure.DataBase;
+using Bulky.infrastructure.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace BulkyWeb.Controllers
 {
-    public class CategoryController(ApplicationDbContext context) : Controller
+    public class CategoryController(IUnitOfWork unitOfWork) : Controller
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public IActionResult Index()
         {
-            List<Category> categories = context.Categories.OrderBy(x=>x.DisplayOrder).ToList();
+            List<Category> categories = _unitOfWork.categoryRepository.GetAll().OrderBy(x=>x.DisplayOrder).ToList();
             return View(categories);
         }
         public IActionResult Create()
@@ -22,49 +25,49 @@ namespace BulkyWeb.Controllers
         public IActionResult Create(Category category) {
             if (ModelState.IsValid)
             {
-                context.Categories.Add(category);
-                context.SaveChanges();
+                _unitOfWork.categoryRepository.Add(category);
+                _unitOfWork.save();
                 TempData["success"] = "Category created successflly.";
                 return RedirectToAction("Index");
             }
             return View("Create", category);
         }
-        public  async  Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id==null ||id==0)
             {
                 return NotFound();
             }
-            Category? category=await context.Categories.FirstOrDefaultAsync(x=>x.Id == id);
+            Category? category= _unitOfWork.categoryRepository.Get(x=>x.Id == id);
             if (category == null) {
                 return NotFound();
             }
             return View(category);
         }
         [HttpPost()]
-        public async Task<IActionResult> Edit(Category category)
+        public IActionResult Edit(Category category)
         {
             if (ModelState.IsValid)
             {
-                Category? cate = await context.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+                Category? cate = _unitOfWork.categoryRepository.Get(x => x.Id == category.Id);
                 if (cate == null) {
                     return NotFound();
                 }
                 cate.Name=category.Name;
                 cate.DisplayOrder=category.DisplayOrder;
-                await context.SaveChangesAsync();
+                _unitOfWork.save();
                 TempData["success"] = "Category updated successflly.";
                 return RedirectToAction("Index");
             }
             return View("Edit", category);
         }
-        public async Task<IActionResult> Delete(int? id)
+        public  IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category? category = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            Category? category = _unitOfWork.categoryRepository.Get(x => x.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -72,14 +75,14 @@ namespace BulkyWeb.Controllers
             return View(category);
         }
         [HttpPost()]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public IActionResult DeleteCategory(int id)
         {
-                Category? cate = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+                Category? cate = _unitOfWork.categoryRepository.Get(x => x.Id == id);
             if (cate == null) {
                 return NotFound();
             }
-                context.Categories.Remove(cate);
-                await context.SaveChangesAsync();
+            _unitOfWork.categoryRepository.Remove(cate);
+            _unitOfWork.save();
             TempData["success"] = "Category deleted successflly.";
             return RedirectToAction("Index");
         }
