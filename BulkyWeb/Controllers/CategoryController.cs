@@ -1,5 +1,6 @@
-﻿using BulkyWeb.DataBase;
-using BulkyWeb.Models;
+﻿
+using Bulky.Data.Models;
+using Bulky.infrastructure.DataBase;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
