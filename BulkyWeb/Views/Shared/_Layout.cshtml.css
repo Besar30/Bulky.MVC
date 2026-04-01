@@ -7,10 +7,23 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-a {
+/*a {
   color: #0077cc;
+}*/
+.dropdown-menu {
+    background-color: white !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.dropdown-item {
+    color: #333;
+    transition: 0.2s;
 }
 
+    .dropdown-item:hover {
+        background-color: #f1f1f1;
+        color: #000;
+    }
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;

@@ -1,13 +1,12 @@
 ﻿
 using Bulky.Data.Models;
-using Bulky.infrastructure.DataBase;
 using Bulky.infrastructure.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
-namespace BulkyWeb.Controllers
+
+namespace BulkyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController(IUnitOfWork unitOfWork) : Controller
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
