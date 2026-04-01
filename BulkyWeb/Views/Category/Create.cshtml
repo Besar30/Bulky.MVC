@@ -1,0 +1,50 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+
+            <h2 class="text-center text-success fw-bold mb-4">➕ Add New Category</h2>
+
+            <form asp-action="Create" method="post">
+
+                <!-- Category Name -->
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control rounded-3 shadow-sm" placeholder="Enter category name..." />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <!-- Display Order -->
+                <div class="mb-3">
+                    <label asp-for="DisplayOrder" class="form-label fw-semibold"></label>
+                    <input asp-for="DisplayOrder" class="form-control rounded-3 shadow-sm" placeholder="Enter display order..." />
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Index" class="btn btn-secondary rounded-pill px-4">
+                        ⬅ Back
+                    </a>
+
+                    <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
+                        💾 Save Category
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
