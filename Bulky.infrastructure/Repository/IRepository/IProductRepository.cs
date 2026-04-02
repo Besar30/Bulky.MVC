@@ -10,6 +10,7 @@ namespace Bulky.infrastructure.Repository.IRepository
     public interface IProductRepository:IRepository<Product>
     {
         IEnumerable<Product> GetAllProduct();
+        Product GetProductById(int id);
         void Update(Product product);
     }
 }

@@ -23,6 +23,11 @@ namespace Bulky.infrastructure.Repository
             return _context.products.Include(x=>x.category).ToList();
         }
 
+        public Product GetProductById(int id)
+        {
+            return _context.products.Where(x => x.Id == id).Include(x => x.category).FirstOrDefault();
+        }
+
         public void Update(Product product)
         {
             _context.Update(product);
