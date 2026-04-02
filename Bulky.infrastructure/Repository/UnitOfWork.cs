@@ -13,11 +13,15 @@ namespace Bulky.infrastructure.Repository
         public ICategoryRepository categoryRepository { get; private set; }
         private readonly ApplicationDbContext _context;
         public IProductRepository productRepository { get; private set; }
+
+        public ICompanyRepository CompanyRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context= context;
             categoryRepository = new CategoryRepository(context);
             productRepository = new ProductRepository(context);
+            CompanyRepository=new CompanyRepository(context);
         }
         public void save()
         {

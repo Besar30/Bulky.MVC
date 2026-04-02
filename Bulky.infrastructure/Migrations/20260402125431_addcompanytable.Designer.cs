@@ -4,6 +4,7 @@ using Bulky.infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260402125431_addcompanytable")]
+    partial class addcompanytable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,38 +95,6 @@ namespace Bulky.infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "New York",
-                            Name = "TechCorp",
-                            PhoneNumber = "212-555-1234",
-                            PostalCode = "10001",
-                            State = "NY",
-                            StreetAddress = "123 Main St"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "San Francisco",
-                            Name = "Foodies Inc.",
-                            PhoneNumber = "415-555-5678",
-                            PostalCode = "94103",
-                            State = "CA",
-                            StreetAddress = "456 Market Ave"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Chicago",
-                            Name = "HealthPlus",
-                            PhoneNumber = "312-555-9012",
-                            PostalCode = "60601",
-                            State = "IL",
-                            StreetAddress = "789 Health Blvd"
-                        });
                 });
 
             modelBuilder.Entity("Bulky.Data.Models.Product", b =>
@@ -475,9 +446,6 @@ namespace Bulky.infrastructure.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -490,8 +458,6 @@ namespace Bulky.infrastructure.Migrations
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -556,15 +522,6 @@ namespace Bulky.infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Bulky.Data.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Bulky.Data.Models.Company", "company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("company");
                 });
 #pragma warning restore 612, 618
         }

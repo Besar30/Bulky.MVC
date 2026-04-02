@@ -10,6 +10,7 @@ namespace Bulky.infrastructure.Repository.IRepository
     {
         ICategoryRepository categoryRepository { get; }
         IProductRepository productRepository { get; }
+        ICompanyRepository CompanyRepository { get; }
         void save();
     }
 }

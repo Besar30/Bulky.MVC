@@ -13,6 +13,7 @@ namespace Bulky.infrastructure.DataBase
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> products { get; set; }    
+        public DbSet<Company> companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -107,6 +108,38 @@ namespace Bulky.infrastructure.DataBase
            ImageUrl = ""
        }
    );
+            modelBuilder.Entity<Company>().HasData(
+               new Company
+               {
+                   Id = 1,
+                   Name = "TechCorp",
+                   StreetAddress = "123 Main St",
+                   City = "New York",
+                   State = "NY",
+                   PostalCode = "10001",
+                   PhoneNumber = "212-555-1234"
+               },
+               new Company
+               {
+                   Id = 2,
+                   Name = "Foodies Inc.",
+                   StreetAddress = "456 Market Ave",
+                   City = "San Francisco",
+                   State = "CA",
+                   PostalCode = "94103",
+                   PhoneNumber = "415-555-5678"
+               },
+               new Company
+               {
+                   Id = 3,
+                   Name = "HealthPlus",
+                   StreetAddress = "789 Health Blvd",
+                   City = "Chicago",
+                   State = "IL",
+                   PostalCode = "60601",
+                   PhoneNumber = "312-555-9012"
+               }
+           );
             base.OnModelCreating(modelBuilder);
         }
     }
