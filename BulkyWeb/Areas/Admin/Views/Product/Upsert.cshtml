@@ -1,0 +1,129 @@
+﻿@model Bulky.Data.ViewModel.ProductVM
+
+@{
+    ViewData["Title"] = "Upsert Movie";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-secondary bg-gradient py-3 text-center">
+            <h2 class="text-white py-2"> @(Model.product.Id != 0 ? "Update" : "Create") Movie</h2>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row">
+
+                <!-- Form Column -->
+                <div class="col-md-8">
+                    <form asp-action="Upsert" method="post" enctype="multipart/form-data">
+                        <input asp-for="product.Id" hidden />
+                        <input asp-for="product.ImageUrl" hidden />
+
+                        <!-- Movie Title -->
+                        <div class="mb-3">
+                            <label asp-for="product.Title" class="form-label fw-semibold">Movie Title</label>
+                            <input asp-for="product.Title" class="form-control" placeholder="Enter movie title" />
+                            <span asp-validation-for="product.Title" class="text-danger"></span>
+                        </div>
+
+                        <!-- Director -->
+                        <div class="mb-3">
+                            <label asp-for="product.Author" class="form-label fw-semibold">Director</label>
+                            <input asp-for="product.Author" class="form-control" placeholder="Enter director name" />
+                            <span asp-validation-for="product.Author" class="text-danger"></span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label asp-for="product.Description" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="product.Description" class="form-control" rows="3" placeholder="Enter description"></textarea>
+                            <span asp-validation-for="product.Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- Movie Code -->
+                        <div class="mb-3">
+                            <label asp-for="product.ISBN" class="form-label fw-semibold">Movie Code</label>
+                            <input asp-for="product.ISBN" class="form-control" placeholder="Enter movie code" />
+                            <span asp-validation-for="product.ISBN" class="text-danger"></span>
+                        </div>
+
+                        <!-- Category Dropdown -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select asp-for="product.CategoryId" class="form-select" asp-items="Model.CategoryList">
+                                <option value="">-- Select Category --</option>
+                            </select>
+                            <span asp-validation-for="product.CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Upload Image -->
+                        <div class="mb-3">
+                            <label asp-for="Image" class="form-label fw-semibold">Movie Poster</label>
+                            <input asp-for="Image" class="form-control" type="file" onchange="previewImage(event)" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+
+                        <!-- Prices -->
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="product.ListPrice" class="form-label fw-semibold">List Price</label>
+                                <input asp-for="product.ListPrice" class="form-control" placeholder="List price" />
+                                <span asp-validation-for="product.ListPrice" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="product.Price" class="form-label fw-semibold">Price 1-50</label>
+                                <input asp-for="product.Price" class="form-control" placeholder="Price for 1-50" />
+                                <span asp-validation-for="product.Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="product.Price50" class="form-label fw-semibold">Price 50+</label>
+                                <input asp-for="product.Price50" class="form-control" placeholder="Price for 50+" />
+                                <span asp-validation-for="product.Price50" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="product.Price100" class="form-label fw-semibold">Price 100+</label>
+                                <input asp-for="product.Price100" class="form-control" placeholder="Price for 100+" />
+                                <span asp-validation-for="product.Price100" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">💾 Save</button>
+                            <a asp-action="Index" class="btn btn-secondary rounded-pill px-4 shadow-sm">🔙 Cancel</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Image Preview Column -->
+                <div class="col-md-4 d-flex flex-column align-items-center justify-content-start">
+                    <h5 class="fw-semibold mb-3">Preview Poster</h5>
+                    <div class="border rounded p-2 w-100 text-center">
+                        <img id="preview"
+                             src="@((Model.product.Id != 0) ? "/images/Product/" + Model.product.ImageUrl: "/images/no-image.png")"
+                             alt="Movie Poster" class="img-fluid rounded" style="max-height:400px;" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

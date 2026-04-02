@@ -3,6 +3,7 @@ using Bulky.infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401215449_addCategoryId")]
+    partial class addCategoryId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,10 +87,6 @@ namespace Bulky.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("ListPrice")
                         .HasColumnType("float");
 
@@ -118,7 +117,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 1,
                             Description = "A mind-bending thriller about dreams within dreams.",
                             ISBN = "MOV001",
-                            ImageUrl = "",
                             ListPrice = 100.0,
                             Price = 90.0,
                             Price100 = 80.0,
@@ -132,7 +130,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 1,
                             Description = "A journey through space and time to save humanity.",
                             ISBN = "MOV002",
-                            ImageUrl = "",
                             ListPrice = 110.0,
                             Price = 100.0,
                             Price100 = 90.0,
@@ -146,7 +143,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 2,
                             Description = "Batman faces the Joker in Gotham City.",
                             ISBN = "MOV003",
-                            ImageUrl = "",
                             ListPrice = 95.0,
                             Price = 85.0,
                             Price100 = 75.0,
@@ -160,7 +156,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 2,
                             Description = "The Avengers assemble for the final battle.",
                             ISBN = "MOV004",
-                            ImageUrl = "",
                             ListPrice = 120.0,
                             Price = 110.0,
                             Price100 = 100.0,
@@ -174,7 +169,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 3,
                             Description = "A romantic story set on the ill-fated Titanic ship.",
                             ISBN = "MOV005",
-                            ImageUrl = "",
                             ListPrice = 90.0,
                             Price = 80.0,
                             Price100 = 70.0,
@@ -188,7 +182,6 @@ namespace Bulky.infrastructure.Migrations
                             CategoryId = 3,
                             Description = "A hacker discovers the shocking truth about reality.",
                             ISBN = "MOV006",
-                            ImageUrl = "",
                             ListPrice = 105.0,
                             Price = 95.0,
                             Price100 = 85.0,

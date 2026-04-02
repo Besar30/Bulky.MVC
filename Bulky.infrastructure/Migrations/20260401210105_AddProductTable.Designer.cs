@@ -3,6 +3,7 @@ using Bulky.infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401210105_AddProductTable")]
+    partial class AddProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,18 +76,11 @@ namespace Bulky.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -106,8 +102,6 @@ namespace Bulky.infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("products");
 
                     b.HasData(
@@ -115,10 +109,8 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 1,
                             Author = "Christopher Nolan",
-                            CategoryId = 1,
                             Description = "A mind-bending thriller about dreams within dreams.",
                             ISBN = "MOV001",
-                            ImageUrl = "",
                             ListPrice = 100.0,
                             Price = 90.0,
                             Price100 = 80.0,
@@ -129,10 +121,8 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 2,
                             Author = "Christopher Nolan",
-                            CategoryId = 1,
                             Description = "A journey through space and time to save humanity.",
                             ISBN = "MOV002",
-                            ImageUrl = "",
                             ListPrice = 110.0,
                             Price = 100.0,
                             Price100 = 90.0,
@@ -143,10 +133,8 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 3,
                             Author = "Christopher Nolan",
-                            CategoryId = 2,
                             Description = "Batman faces the Joker in Gotham City.",
                             ISBN = "MOV003",
-                            ImageUrl = "",
                             ListPrice = 95.0,
                             Price = 85.0,
                             Price100 = 75.0,
@@ -157,10 +145,8 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 4,
                             Author = "Anthony & Joe Russo",
-                            CategoryId = 2,
                             Description = "The Avengers assemble for the final battle.",
                             ISBN = "MOV004",
-                            ImageUrl = "",
                             ListPrice = 120.0,
                             Price = 110.0,
                             Price100 = 100.0,
@@ -171,10 +157,8 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 5,
                             Author = "James Cameron",
-                            CategoryId = 3,
                             Description = "A romantic story set on the ill-fated Titanic ship.",
                             ISBN = "MOV005",
-                            ImageUrl = "",
                             ListPrice = 90.0,
                             Price = 80.0,
                             Price100 = 70.0,
@@ -185,27 +169,14 @@ namespace Bulky.infrastructure.Migrations
                         {
                             Id = 6,
                             Author = "The Wachowskis",
-                            CategoryId = 3,
                             Description = "A hacker discovers the shocking truth about reality.",
                             ISBN = "MOV006",
-                            ImageUrl = "",
                             ListPrice = 105.0,
                             Price = 95.0,
                             Price100 = 85.0,
                             Price50 = 90.0,
                             Title = "The Matrix"
                         });
-                });
-
-            modelBuilder.Entity("Bulky.Data.Models.Product", b =>
-                {
-                    b.HasOne("Bulky.Data.Models.Category", "category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("category");
                 });
 #pragma warning restore 612, 618
         }
