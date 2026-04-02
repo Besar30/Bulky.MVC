@@ -1,0 +1,101 @@
+﻿@model Bulky.Data.ViewModel.ShoppinCartVM
+
+<div class="container mt-5" style="background-color:#fdf6e3; padding:30px; border-radius:15px;">
+
+    <h2 class="mb-4 text-center">Shopping Cart</h2>
+
+    @if (!Model.ListCart.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Your cart is empty.
+        </div>
+        <div class="text-center mt-3">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary text-uppercase btn-sm">
+                <small>Continue Shopping</small>
+            </a>
+        </div>
+    }
+    else
+    {
+        <form asp-action="Summary" method="post">
+            <div class="row g-4">
+                @foreach (var item in Model.ListCart)
+                {
+                    <div class="col-md-12">
+                        <div class="card shadow-sm border-0 rounded-4 mb-3">
+                            <div class="row g-0 align-items-center">
+                                <!-- Image -->
+                                <div class="col-md-3 text-center p-3">
+                                    <img src="~/images/Product/@item.product.ImageUrl"
+                                         class="img-fluid rounded"
+                                         style="max-height:150px; object-fit:contain;" />
+                                </div>
+
+                                <!-- Product Details -->
+                                <div class="col-md-6 p-3">
+                                    <h5 class="text-secondary fw-bold">@item.product.Title</h5>
+                                    <p class="text-muted mb-1">@item.product.Description</p>
+                                    <p class="mb-0">
+                                        <strong>Unit Price: </strong> $@item.Price
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Quantity: </strong> @item.Count
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Subtotal: </strong> $@(item.Price* item.Count)
+                                    </p>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3 d-flex flex-column justify-content-center align-items-center p-3">
+                                    <!-- Quantity Update -->
+                                    <div class="d-flex mb-2">
+                                        <input type="hidden" name="cartId" value="@item.Id" />
+                                        <input type="number" name="count[@item.Id]" value="@item.Count" min="1"
+                                               class="form-control me-2" style="width:70px;" />
+                                    </div>
+                                    <!-- Remove Item -->
+                                    <form asp-action="Remove" method="post">
+                                        <input type="hidden" name="cartId" value="@item.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2">
+                                            <i class="bi bi-trash-fill"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Total Centered -->
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6 text-center">
+                    <ul class="list-group mb-3" style="border:none;">
+                        <li class="list-group-item d-flex justify-content-between align-items-center mx-auto"
+                            style="background-color:#fdf6e3; border:none; max-width:300px;">
+                            <span class="fw-bold text-dark">Total (USD)</span>
+                            <span class="fw-bold text-dark">
+                                $@Model.OrderTotal
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="row mt-3 justify-content-center">
+                <div class="col-md-3 d-grid gap-2">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary text-uppercase py-2">
+                        Continue Shopping
+                    </a>
+                </div>
+                <div class="col-md-3 d-grid gap-2">
+                    <button type="submit" class="btn btn-primary py-2">
+                        SUMMARY
+                    </button>
+                </div>
+            </div>
+        </form>
+    }
+</div>

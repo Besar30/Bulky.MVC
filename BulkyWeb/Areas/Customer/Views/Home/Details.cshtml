@@ -1,12 +1,13 @@
-﻿@model Product
-
+﻿@model ShoppingCart
+<form asp-action="Details" method="post">
+    <input type="hidden" asp-for="ProductId" />
 <div class="container mt-5" style="background-color:#fdf6e3; padding:30px; border-radius:15px;">
     <div class="row">
 
         <!-- Image -->
         <div class="col-md-5 text-center mb-3">
             <div class="p-3 rounded" style="background:#fff;">
-                <img src="~/images/Product/@Model.ImageUrl"
+                <img src="~/images/Product/@Model.product.ImageUrl"
                      class="img-fluid rounded"
                      style="max-height:400px; object-fit:contain;" />
             </div>
@@ -15,27 +16,27 @@
         <!-- Details -->
         <div class="col-md-7">
 
-            <h2 class="mb-4">@Model.Title</h2>
+            <h2 class="mb-4">@Model.product.Title</h2>
 
             <!-- Fields -->
             <div class="row mb-2">
                 <div class="col-4 fw-semibold">Author :</div>
-                <div class="col-8 text-muted">@Model.Author</div>
+                <div class="col-8 text-muted">@Model.product.Author</div>
             </div>
 
             <div class="row mb-2">
                 <div class="col-4 fw-semibold">ISBN :</div>
-                <div class="col-8">@Model.ISBN</div>
+                <div class="col-8">@Model.product.ISBN</div>
             </div>
 
             <div class="row mb-2">
                 <div class="col-4 fw-semibold">Category :</div>
-                <div class="col-8">@Model.category?.Name</div>
+                <div class="col-8">@Model.product.category?.Name</div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-4 fw-semibold">Description :</div>
-                <div class="col-8 text-muted">@Model.Description</div>
+                <div class="col-8 text-muted">@Model.product.Description</div>
             </div>
 
             <hr />
@@ -44,20 +45,26 @@
             <div class="row mb-2">
                 <div class="col-4 fw-semibold">List Price :</div>
                 <div class="col-8 text-decoration-line-through text-muted">
-                    $@Model.ListPrice
+                    $@Model.product.ListPrice
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-4 fw-semibold">Price :</div>
                 <div class="col-8 text-success fw-bold fs-5">
-                    $@Model.Price
+                    $@Model.product.Price
                 </div>
             </div>
-
+            <!-- Quantity -->
+            <div class="row mb-3 align-items-center">
+                <div class="col-4 fw-semibold">Quantity :</div>
+                <div class="col-4">
+                    <input type="number"asp-for="Count" value="1" min="1" class="form-control" />
+                </div>
+            </div>
             <!-- Buttons -->
             <div class="mt-4 d-flex gap-2">
-                <a href="#" class="btn btn-success w-50">Add to Cart</a>
+                <button type="submit" class="btn btn-success w-50">Add to Cart</button>
                 <a asp-action="Index" class="btn btn-outline-dark w-50">Back</a>
             </div>
 
@@ -65,3 +72,4 @@
 
     </div>
 </div>
+</form>

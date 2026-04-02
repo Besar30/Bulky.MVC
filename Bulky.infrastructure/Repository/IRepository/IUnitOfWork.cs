@@ -11,6 +11,8 @@ namespace Bulky.infrastructure.Repository.IRepository
         ICategoryRepository categoryRepository { get; }
         IProductRepository productRepository { get; }
         ICompanyRepository CompanyRepository { get; }
+        IShoppingCartRepository ShoppingCartRepository { get; }
+        IApplicationUserRepository ApplicationUserRepository { get; }
         void save();
     }
 }

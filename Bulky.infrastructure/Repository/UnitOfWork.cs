@@ -16,12 +16,16 @@ namespace Bulky.infrastructure.Repository
 
         public ICompanyRepository CompanyRepository { get; private set; }
 
+        public IShoppingCartRepository ShoppingCartRepository { get; private set; }
+        public IApplicationUserRepository ApplicationUserRepository { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context= context;
             categoryRepository = new CategoryRepository(context);
             productRepository = new ProductRepository(context);
             CompanyRepository=new CompanyRepository(context);
+            ShoppingCartRepository = new ShoppingCartRepository(context);
+            ApplicationUserRepository = new ApplicationUserRepository(context);
         }
         public void save()
         {
