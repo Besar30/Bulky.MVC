@@ -76,7 +76,7 @@
                             style="background-color:#fdf6e3; border:none; max-width:300px;">
                             <span class="fw-bold text-dark">Total (USD)</span>
                             <span class="fw-bold text-dark">
-                                $@Model.OrderTotal
+                                $@Model.OrderHeader.OrderTolal
                             </span>
                         </li>
                     </ul>
@@ -91,9 +91,9 @@
                     </a>
                 </div>
                 <div class="col-md-3 d-grid gap-2">
-                    <button type="submit" class="btn btn-primary py-2">
+                    <a asp-action="Summary" class="btn btn-primary py-2">
                         SUMMARY
-                    </button>
+                    </a>
                 </div>
             </div>
         </form>

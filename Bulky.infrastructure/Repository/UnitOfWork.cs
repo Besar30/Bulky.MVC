@@ -18,6 +18,11 @@ namespace Bulky.infrastructure.Repository
 
         public IShoppingCartRepository ShoppingCartRepository { get; private set; }
         public IApplicationUserRepository ApplicationUserRepository { get; private set; }
+
+        public IOrderDetailRepository OrderDetailRepository { get; private set; }
+
+        public IOrderHeaderRepository OrderHeaderRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context= context;
@@ -26,6 +31,8 @@ namespace Bulky.infrastructure.Repository
             CompanyRepository=new CompanyRepository(context);
             ShoppingCartRepository = new ShoppingCartRepository(context);
             ApplicationUserRepository = new ApplicationUserRepository(context);
+            OrderHeaderRepository = new OrderHeaderRepository(context);
+            OrderDetailRepository = new OrderDetailRepository(context);
         }
         public void save()
         {

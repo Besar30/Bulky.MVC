@@ -5,7 +5,7 @@
 namespace Bulky.infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ShoppingCart : Migration
+    public partial class ShoppingCart1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
