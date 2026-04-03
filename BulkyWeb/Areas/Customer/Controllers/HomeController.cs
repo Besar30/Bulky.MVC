@@ -1,9 +1,12 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Bulky.Data.Models;
 using Bulky.infrastructure.Repository.IRepository;
+using BulkyWeb.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BulkyWeb.Areas.Customer.Controllers
 {
@@ -36,7 +39,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
         }
         [HttpPost]
         [Authorize]
-        public IActionResult Details(ShoppingCart shoppingCart)
+        public async Task<IActionResult> Details(ShoppingCart shoppingCart)
         {
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (UserId == null) {
@@ -46,7 +49,6 @@ namespace BulkyWeb.Areas.Customer.Controllers
             if (shopping != null)
             {
                 shopping.Count += shoppingCart.Count;
-
             }
             else
             {
@@ -56,6 +58,9 @@ namespace BulkyWeb.Areas.Customer.Controllers
             }
             TempData["success"] = "Cart Updated Successfly";
             _unitOfWork.save();
+            int totalCount = _unitOfWork.ShoppingCartRepository
+                     .GetCart(UserId)
+                     .Sum(c => c.Count);
             return RedirectToAction("Index");
         }
         public IActionResult Privacy()
