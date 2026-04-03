@@ -124,7 +124,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
                 }
                 var service = new Stripe.Checkout.SessionService();
                 Stripe.Checkout.Session session = service.Create(options);
-                _unitOfWork.OrderHeaderRepository.UpdateStripePaymenrID(shoppinCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                _unitOfWork.OrderHeaderRepository.UpdateStripePaymenrID(shoppinCartVM.OrderHeader.Id, session.Id  , session.PaymentIntentId);
                 _unitOfWork.save();
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);

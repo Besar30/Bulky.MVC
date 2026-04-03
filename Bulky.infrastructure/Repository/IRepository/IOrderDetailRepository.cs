@@ -9,5 +9,6 @@ namespace Bulky.infrastructure.Repository.IRepository
 {
     public interface IOrderDetailRepository:IRepository<OrderDetail>
     {
+        IEnumerable<OrderDetail> getAll(int orderHeaderId);
     }
 }

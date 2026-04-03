@@ -1,6 +1,7 @@
 ﻿using Bulky.Data.Models;
 using Bulky.infrastructure.DataBase;
 using Bulky.infrastructure.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace Bulky.infrastructure.Repository
         public OrderDetailRepository(ApplicationDbContext context):base(context)
         {
             _context = context;
+        }
+
+        public IEnumerable<OrderDetail> getAll(int orderHeaderId)
+        {
+            return _context.OrderDetails.Where(x => x.OrderHeaderId == orderHeaderId).Include(x => x.Product).AsNoTracking().AsEnumerable();
         }
     }
 }

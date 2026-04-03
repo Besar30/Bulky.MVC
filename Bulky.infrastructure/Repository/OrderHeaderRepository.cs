@@ -18,6 +18,14 @@ namespace Bulky.infrastructure.Repository
             _context = context;
         }
 
+        public List<OrderHeader> GetAllOrderHeader()
+        {
+           return _context.OrderHeaders.Include(x=>x.applicationUser).ToList();
+        }
+        public IEnumerable<OrderHeader> GetOrdersUser(string UserId)
+        {
+            return _context.OrderHeaders.Where(x=>x.ApplicationUserId==UserId).Include(x=>x.applicationUser).ToList();
+        }
         public OrderHeader GetById(int id)
         {
             return _context.OrderHeaders.Where(x => x.Id == id).Include(x => x.applicationUser).FirstOrDefault();

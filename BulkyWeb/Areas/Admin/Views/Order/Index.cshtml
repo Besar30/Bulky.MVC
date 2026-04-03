@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Bulky.Data.Models.OrderHeader>
+
+@{
+    ViewData["Title"] = "Orders List";
+    var status = Context.Request.Query["status"].ToString();
+}
+
+<div class="container mt-5">
+
+    <!-- Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">📦 Orders</h2>
+    </div>
+
+    <!-- Filters -->
+    <div class="mb-4">
+        <div class="btn-group shadow-sm">
+
+            <a asp-action="Index" asp-route-status="all"
+               class="btn @(status == "all" || string.IsNullOrEmpty(status) ? "btn-dark" : "btn-outline-dark")">
+                All
+            </a>
+
+            <a asp-action="Index" asp-route-status="inprocess"
+               class="btn @(status == "inprocess" ? "btn-warning text-dark" : "btn-outline-warning")">
+                In Process
+            </a>
+
+            <a asp-action="Index" asp-route-status="pending"
+               class="btn @(status == "pending" ? "btn-secondary" : "btn-outline-secondary")">
+                Payment Pending
+            </a>
+
+            <a asp-action="Index" asp-route-status="completed"
+               class="btn @(status == "completed" ? "btn-success" : "btn-outline-success")">
+                Completed
+            </a>
+
+            <a asp-action="Index" asp-route-status="approved"
+               class="btn @(status == "approved" ? "btn-info text-dark" : "btn-outline-info")">
+                Approved
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr class="text-muted">
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Total</th>
+                        <th>Order Status</th>
+                        <th>Payment</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">#@order.Id</td>
+
+                            <td>@order.Name</td>
+
+                            <td>@order.PhoneNumber</td>
+
+                            <td class="fw-semibold text-success">
+                                @order.OrderTolal.ToString("c")
+                            </td>
+
+                            <!-- Order Status -->
+                            <td>
+                                <span class="badge px-3 py-2
+                                        @(order.OrderStatus == "Completed" ? "bg-success" :
+                                                                            order.OrderStatus == "Approved" ? "bg-info text-dark" :
+                                                                            order.OrderStatus == "In Process" ? "bg-warning text-dark" :
+                                                                            "bg-secondary")">
+                                                                                         @order.OrderStatus
+                                                                                     </span>
+                                                                                 </td>
+
+                            <!-- Payment Status -->
+                            <td>
+                                <span class="badge px-3 py-2
+                                        @(order.PaymentStatus == "Approved" ? "bg-success" :
+                                                                            order.PaymentStatus == "Pending" ? "bg-warning text-dark" :
+                                                                            "bg-secondary")">
+                                @order.PaymentStatus
+                            </span>
+                        </td>
+
+                            <td class="text-muted">
+                                @order.OrderDate.ToShortDateString()
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="Details" asp-route-orderId="@order.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        👁
+                                    </a>
+                                </div>
+                            </td>
+
+                        </tr>
+                                        }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
