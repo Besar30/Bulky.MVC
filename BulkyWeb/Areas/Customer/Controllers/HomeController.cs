@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bulky.Data.Models;
 using Bulky.infrastructure.Repository.IRepository;
 using BulkyWeb.Hubs;
+using BulkyWeb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -15,10 +16,12 @@ namespace BulkyWeb.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(ILogger<HomeController> logger,IUnitOfWork unitOfWork)
+        private readonly ICacheServices _cacheServices;
+        public HomeController(ILogger<HomeController> logger,IUnitOfWork unitOfWork,ICacheServices cacheServices)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _cacheServices = cacheServices;
         }
 
         public IActionResult Index()
@@ -58,9 +61,8 @@ namespace BulkyWeb.Areas.Customer.Controllers
             }
             TempData["success"] = "Cart Updated Successfly";
             _unitOfWork.save();
-            int totalCount = _unitOfWork.ShoppingCartRepository
-                     .GetCart(UserId)
-                     .Sum(c => c.Count);
+           await _cacheServices.RemoveAsync<int>(key: $"CartKey_{UserId}");
+
             return RedirectToAction("Index");
         }
         public IActionResult Privacy()

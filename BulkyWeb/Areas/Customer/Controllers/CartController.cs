@@ -3,6 +3,7 @@ using Bulky.Data.ViewModel;
 using Bulky.infrastructure.Migrations;
 using Bulky.infrastructure.Repository.IRepository;
 using Bulky.Utility;
+using BulkyWeb.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
@@ -16,10 +17,13 @@ namespace BulkyWeb.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICacheServices _cacheServices;
+
         public ShoppinCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork,ICacheServices cacheServices)
         {
             _unitOfWork = unitOfWork;
+            _cacheServices = cacheServices;
         }
         public IActionResult Index()
         {
@@ -131,7 +135,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
             }
             return RedirectToAction(nameof(OrderConfirmation),new {id=shoppinCartVM.OrderHeader.Id});
         }
-        public IActionResult OrderConfirmation(int id)
+        public async Task<IActionResult> OrderConfirmation(int id)
         {
             var orderHeader=_unitOfWork.OrderHeaderRepository.GetById(id);
             if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
@@ -147,8 +151,20 @@ namespace BulkyWeb.Areas.Customer.Controllers
             }
             List<ShoppingCart> shoppings = _unitOfWork.ShoppingCartRepository.GetCart(orderHeader.applicationUser.Id).ToList();
             _unitOfWork.ShoppingCartRepository.RemoveRange(shoppings);
+            await _cacheServices.RemoveAsync<int>(key: $"CartKey_{orderHeader.applicationUser.Id}");
+
             _unitOfWork.save();
             return View(id);
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            ShoppingCart shoppingCart = _unitOfWork.ShoppingCartRepository.GetProduct(id, UserId);
+            _unitOfWork.ShoppingCartRepository.Remove(shoppingCart);
+            _unitOfWork.save();
+            await _cacheServices.RemoveAsync<int>( $"CartKey_{UserId}");
+
+            return RedirectToAction(nameof(Index));
         }
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
         {

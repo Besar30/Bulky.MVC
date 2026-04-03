@@ -26,5 +26,10 @@ namespace Bulky.infrastructure.Repository
         {
             return _context.shoppingCarts.Where(x=>x.ApplicationUserId==UserId).Sum(x=>x.Count);
         }
+
+        public ShoppingCart GetProduct(int ProductId,string UserId)
+        {
+            return _context.shoppingCarts.Where(x => x.ProductId == ProductId &&x.ApplicationUserId==UserId).FirstOrDefault();
+        }
     }
 }

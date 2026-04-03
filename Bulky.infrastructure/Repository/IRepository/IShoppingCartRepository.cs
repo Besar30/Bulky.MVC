@@ -11,6 +11,7 @@ namespace Bulky.infrastructure.Repository.IRepository
     {
         IEnumerable<ShoppingCart> GetCart(string UserId);
         public int GetCountCart(string UserId);
+        ShoppingCart GetProduct(int  ProductId,string UserId);
 
     }
 }
