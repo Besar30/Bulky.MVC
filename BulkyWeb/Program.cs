@@ -1,4 +1,5 @@
 using Bulky.infrastructure.DataBase;
+using Bulky.infrastructure.DbIntializer;
 using Bulky.infrastructure.Repository;
 using Bulky.infrastructure.Repository.IRepository;
 using Bulky.Utility;
@@ -25,12 +26,18 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStor
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICacheServices,CacheServices>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IDbintializer, Dbintializer>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 
+});
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = "1270903148515880";
+    option.AppSecret = "1c695dae1f82808dfd0c920573e96719";
 });
 builder.Services.AddRazorPages();
 var app = builder.Build();
@@ -49,6 +56,7 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+SeedDatabase();
 app.MapRazorPages();
 app.MapStaticAssets();
 
@@ -59,3 +67,13 @@ app.MapControllerRoute(
 app.MapHub<CartHub>("/hubs/cart");
 
 app.Run();
+
+
+void SeedDatabase()
+{
+    using(var scope = app.Services.CreateScope())
+    {
+       var dbinitializer= scope.ServiceProvider.GetRequiredService<IDbintializer>();
+        dbinitializer.intializer();
+    }
+}

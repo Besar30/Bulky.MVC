@@ -5,6 +5,7 @@ using Bulky.infrastructure.Repository.IRepository;
 using Bulky.Utility;
 using BulkyWeb.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using System.Security.Claims;
@@ -18,12 +19,13 @@ namespace BulkyWeb.Areas.Customer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICacheServices _cacheServices;
-
+        private readonly IEmailSender _emailSender;
         public ShoppinCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork,ICacheServices cacheServices)
+        public CartController(IUnitOfWork unitOfWork,ICacheServices cacheServices,IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _cacheServices = cacheServices;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -152,7 +154,8 @@ namespace BulkyWeb.Areas.Customer.Controllers
             List<ShoppingCart> shoppings = _unitOfWork.ShoppingCartRepository.GetCart(orderHeader.applicationUser.Id).ToList();
             _unitOfWork.ShoppingCartRepository.RemoveRange(shoppings);
             await _cacheServices.RemoveAsync<int>(key: $"CartKey_{orderHeader.applicationUser.Id}");
-
+            await _emailSender.SendEmailAsync(orderHeader.applicationUser.Email, "New Order -Bulky Book",
+                $"<p>New Order Created- {orderHeader.Id}</p>");
             _unitOfWork.save();
             return View(id);
         }
