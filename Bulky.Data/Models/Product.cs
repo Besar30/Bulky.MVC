@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,10 +34,14 @@ namespace Bulky.Data.Models
         [Required]
         [Display(Name = "Price 100+")]
         public double Price100 { get; set; }
-        public string? ImageUrl {  get; set; }
+      
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         public Category? category { get; set; }
-
+        [ValidateNever]
+        public List<ProductImage> productImages { get; set; }
+        [NotMapped]
+        [ValidateNever]
+       public string Image {  get; set; }
     }
 }

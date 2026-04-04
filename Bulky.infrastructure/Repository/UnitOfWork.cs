@@ -23,6 +23,8 @@ namespace Bulky.infrastructure.Repository
 
         public IOrderHeaderRepository OrderHeaderRepository { get; private set; }
 
+        public IImageProductRepository ImageProductRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context= context;
@@ -33,6 +35,7 @@ namespace Bulky.infrastructure.Repository
             ApplicationUserRepository = new ApplicationUserRepository(context);
             OrderHeaderRepository = new OrderHeaderRepository(context);
             OrderDetailRepository = new OrderDetailRepository(context);
+            ImageProductRepository=new ImageProductRepository(context);
         }
         public void save()
         {

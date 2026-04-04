@@ -4,6 +4,7 @@ using Bulky.infrastructure.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260404140718_RemoveProductImage")]
+    partial class RemoveProductImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -357,28 +360,6 @@ namespace Bulky.infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Bulky.Data.Models.ProductImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("productImages");
-                });
-
             modelBuilder.Entity("Bulky.Data.Models.ShoppingCart", b =>
                 {
                     b.Property<int>("Id")
@@ -682,17 +663,6 @@ namespace Bulky.infrastructure.Migrations
                     b.Navigation("category");
                 });
 
-            modelBuilder.Entity("Bulky.Data.Models.ProductImage", b =>
-                {
-                    b.HasOne("Bulky.Data.Models.Product", "Product")
-                        .WithMany("productImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Bulky.Data.Models.ShoppingCart", b =>
                 {
                     b.HasOne("Bulky.Data.Models.ApplicationUser", "applicationUser")
@@ -770,11 +740,6 @@ namespace Bulky.infrastructure.Migrations
                         .HasForeignKey("CompanyId");
 
                     b.Navigation("company");
-                });
-
-            modelBuilder.Entity("Bulky.Data.Models.Product", b =>
-                {
-                    b.Navigation("productImages");
                 });
 #pragma warning restore 612, 618
         }

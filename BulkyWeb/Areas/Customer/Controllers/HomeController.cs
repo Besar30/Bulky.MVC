@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Bulky.Data.Models;
+using Bulky.Data.ViewModel;
 using Bulky.infrastructure.Repository.IRepository;
 using BulkyWeb.Hubs;
 using BulkyWeb.Services;
@@ -26,19 +27,25 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> products=_unitOfWork.productRepository.GetAll();
+            IEnumerable<Product> products=_unitOfWork.productRepository.GetAllProduct();
             return View(products);
         }
         public IActionResult Details(int id)
         {
             Product product = _unitOfWork.productRepository.GetProductById(id);
+            List<ImageProductVM> Images = _unitOfWork.ImageProductRepository.GetImageProudct(id);
             ShoppingCart shoppingCart = new ShoppingCart()
             {
                 product = product,
                 Count=1,
                 ProductId= id
             };
-            return View(shoppingCart);
+            ProductDetailsVM productDetailsVM = new ProductDetailsVM()
+            {
+                shoppingCart=shoppingCart,
+                ProductImage=Images
+            };
+            return View(productDetailsVM);
         }
         [HttpPost]
         [Authorize]

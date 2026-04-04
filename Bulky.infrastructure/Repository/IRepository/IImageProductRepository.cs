@@ -1,4 +1,5 @@
 ﻿using Bulky.Data.Models;
+using Bulky.Data.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Bulky.infrastructure.Repository.IRepository
 {
-    public interface IProductRepository:IRepository<Product>
+    public interface IImageProductRepository:IRepository<ProductImage>
     {
-        IEnumerable<Product> GetAllProduct();
-        Product GetProductById(int? id);
-        void Update(Product product);
+        List<ImageProductVM> GetImageProudct(int? id);
     }
 }

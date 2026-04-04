@@ -15,6 +15,7 @@ namespace Bulky.infrastructure.Repository.IRepository
         IApplicationUserRepository ApplicationUserRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
         IOrderHeaderRepository OrderHeaderRepository { get; }
+        IImageProductRepository ImageProductRepository { get; }
         void save();
     }
 }

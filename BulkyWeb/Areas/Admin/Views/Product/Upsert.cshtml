@@ -18,8 +18,8 @@
                 <div class="col-md-8">
                     <form asp-action="Upsert" method="post" enctype="multipart/form-data">
                         <input asp-for="product.Id" hidden />
-                        <input asp-for="product.ImageUrl" hidden />
-
+                        @* <input asp-for="product.ImageUrl" hidden /> *@
+                        <div asp-validation-summary="All" class="text-danger"></div>                        
                         <!-- Movie Title -->
                         <div class="mb-3">
                             <label asp-for="product.Title" class="form-label fw-semibold">Movie Title</label>
@@ -59,9 +59,13 @@
 
                         <!-- Upload Image -->
                         <div class="mb-3">
-                            <label asp-for="Image" class="form-label fw-semibold">Movie Poster</label>
-                            <input asp-for="Image" class="form-control" type="file" onchange="previewImage(event)" />
-                            <span asp-validation-for="Image" class="text-danger"></span>
+                            <label asp-for="Images" class="form-label fw-semibold">Movie Poster</label>
+                            <input asp-for="Images"
+                                   class="form-control"
+                                   type="file"
+                                   multiple
+                                   onchange="previewImages(event)" />                           
+                                   <span asp-validation-for="Images" class="text-danger"></span>
                         </div>
 
                         <!-- Prices -->
@@ -100,12 +104,44 @@
                 </div>
 
                 <!-- Image Preview Column -->
-                <div class="col-md-4 d-flex flex-column align-items-center justify-content-start">
+                <div class="col-md-4 d-flex flex-column align-items-center">
                     <h5 class="fw-semibold mb-3">Preview Poster</h5>
-                    <div class="border rounded p-2 w-100 text-center">
-                        <img id="preview"
-                             src="@((Model.product.Id != 0) ? "/images/Product/" + Model.product.ImageUrl: "/images/no-image.png")"
-                             alt="Movie Poster" class="img-fluid rounded" style="max-height:400px;" />
+
+                    <div id="preview"
+                         class="border rounded p-3 w-100 d-flex flex-wrap gap-3 justify-content-start">
+
+                        @if (Model.product.Id != 0 && Model.ImagesProduct != null)
+                        {
+                            foreach (var img in Model.ImagesProduct)
+                            {
+                                <div class="card shadow-sm" style="width:120px;">
+
+                                    <img src="~/images/Product-@Model.product.Id/@img.ImageUrl"
+                                         class="card-img-top"
+                                         style="height:150px;object-fit:cover;" />
+
+                                    <div class="card-body p-2 text-center">
+
+                                        <a asp-action="Deleteimage"
+                                           asp-route-imageId="@img.Id"
+                                           asp-route-productId="@Model.product.Id"
+                                           onclick="return confirm('Are you sure?')"
+                                           class="btn btn-danger btn-sm w-100">
+                                            🗑 Delete
+                                        </a>
+
+                                    </div>
+                                </div>
+                            }
+                        }
+                      
+
+                    </div>
+                    <div id="previewContainer"
+                         class="border rounded p-2 w-100 d-flex flex-wrap gap-2 justify-content-center">
+
+                       
+
                     </div>
                 </div>
 
@@ -116,14 +152,31 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function(){
-                const output = document.getElementById('preview');
-                output.src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
+           <script>
+        function previewImages(event) {
+            const container = document.getElementById('previewContainer');
+            container.innerHTML = "";
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+
+                    img.style.width = "100px";
+                    img.style.height = "140px";
+                    img.style.objectFit = "cover";
+                    img.classList.add("rounded", "shadow");
+
+                    container.appendChild(img);
+                };
+
+                reader.readAsDataURL(files[i]);
+            }
         }
+    </script>
     </script>
 }

@@ -1,77 +1,88 @@
-﻿@model ShoppingCart
+﻿@model Bulky.Data.ViewModel.ProductDetailsVM
+
 <form asp-action="Details" method="post">
-    <input type="hidden" asp-for="ProductId" />
-<div class="container mt-5" style="background-color:#fdf6e3; padding:30px; border-radius:15px;">
-    <div class="row">
+    <input type="hidden" asp-for="shoppingCart.ProductId" />
 
-        <!-- Image -->
-        <div class="col-md-5 text-center mb-3">
-            <div class="p-3 rounded" style="background:#fff;">
-                <img src="~/images/Product/@Model.product.ImageUrl"
-                     class="img-fluid rounded"
-                     style="max-height:400px; object-fit:contain;" />
+    <div class="container mt-5" style="background-color:#fdf6e3; padding:30px; border-radius:15px;">
+        <div class="row">
+
+            <!-- Image Slider -->
+            <div class="col-md-5 text-center mb-3">
+                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.ProductImage.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="~/images/Product-@Model.shoppingCart.product.Id/@Model.ProductImage[i].ImageUrl"
+                                     class="d-block w-100 rounded"
+                                     style="max-height:400px; object-fit:contain;" />
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
             </div>
+
+            <!-- Details -->
+            <div class="col-md-7">
+
+                <h2 class="mb-4">@Model.shoppingCart.product.Title</h2>
+
+                <div class="row mb-2">
+                    <div class="col-4 fw-semibold">Author :</div>
+                    <div class="col-8 text-muted">@Model.shoppingCart.product.Author</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-4 fw-semibold">ISBN :</div>
+                    <div class="col-8">@Model.shoppingCart.product.ISBN</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-4 fw-semibold">Category :</div>
+                    <div class="col-8">@Model.shoppingCart.product.category?.Name</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-4 fw-semibold">Description :</div>
+                    <div class="col-8 text-muted">@Model.shoppingCart.product.Description</div>
+                </div>
+
+                <hr />
+
+                <div class="row mb-2">
+                    <div class="col-4 fw-semibold">List Price :</div>
+                    <div class="col-8 text-decoration-line-through text-muted">
+                        $@Model.shoppingCart.product.ListPrice
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-4 fw-semibold">Price :</div>
+                    <div class="col-8 text-success fw-bold fs-5">
+                        $@Model.shoppingCart.product.Price
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-center">
+                    <div class="col-4 fw-semibold">Quantity :</div>
+                    <div class="col-4">
+                        <input type="number" asp-for="shoppingCart.Count" value="1" min="1" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-success w-50">Add to Cart</button>
+                    <a asp-action="Index" class="btn btn-outline-dark w-50">Back</a>
+                </div>
+
+            </div>
+
         </div>
-
-        <!-- Details -->
-        <div class="col-md-7">
-
-            <h2 class="mb-4">@Model.product.Title</h2>
-
-            <!-- Fields -->
-            <div class="row mb-2">
-                <div class="col-4 fw-semibold">Author :</div>
-                <div class="col-8 text-muted">@Model.product.Author</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-4 fw-semibold">ISBN :</div>
-                <div class="col-8">@Model.product.ISBN</div>
-            </div>
-
-            <div class="row mb-2">
-                <div class="col-4 fw-semibold">Category :</div>
-                <div class="col-8">@Model.product.category?.Name</div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-4 fw-semibold">Description :</div>
-                <div class="col-8 text-muted">@Model.product.Description</div>
-            </div>
-
-            <hr />
-
-            <!-- Prices -->
-            <div class="row mb-2">
-                <div class="col-4 fw-semibold">List Price :</div>
-                <div class="col-8 text-decoration-line-through text-muted">
-                    $@Model.product.ListPrice
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-4 fw-semibold">Price :</div>
-                <div class="col-8 text-success fw-bold fs-5">
-                    $@Model.product.Price
-                </div>
-            </div>
-            <!-- Quantity -->
-            <div class="row mb-3 align-items-center">
-                <div class="col-4 fw-semibold">Quantity :</div>
-                <div class="col-4">
-                    <input type="number"asp-for="Count" value="1" min="1" class="form-control" />
-                </div>
-            </div>
-            <!-- Buttons -->
-            <div class="mt-4 d-flex gap-2">
-                    <button type="submit"  class="btn btn-success w-50">Add to Cart</button>
-                    <input type="number" hidden id="quantity" value="1" min="1" class="form-control" style="width:80px;">
-                <a asp-action="Index" class="btn btn-outline-dark w-50">Back</a>
-            </div>
-
-        </div>
-
     </div>
-</div>
 </form>
-

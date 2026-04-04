@@ -18,6 +18,7 @@ namespace Bulky.infrastructure.DataBase
         public DbSet<ShoppingCart> shoppingCarts { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
+        public DbSet<ProductImage> productImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
@@ -37,8 +38,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 90,
            Price50 = 85,
            Price100 = 80,
-           CategoryId = 1,
-           ImageUrl=""
+           CategoryId = 1
        },
        new Product
        {
@@ -51,8 +51,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 100,
            Price50 = 95,
            Price100 = 90,
-           CategoryId = 1,
-           ImageUrl = ""
+           CategoryId = 1
        },
        new Product
        {
@@ -65,8 +64,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 85,
            Price50 = 80,
            Price100 = 75,
-           CategoryId=2,
-           ImageUrl = ""
+           CategoryId=2
        },
        new Product
        {
@@ -79,8 +77,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 110,
            Price50 = 105,
            Price100 = 100,
-           CategoryId=2,
-           ImageUrl = ""
+           CategoryId=2
        },
        new Product
        {
@@ -93,8 +90,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 80,
            Price50 = 75,
            Price100 = 70,
-           CategoryId=3,
-           ImageUrl = ""
+           CategoryId=3
        },
        new Product
        {
@@ -107,8 +103,7 @@ namespace Bulky.infrastructure.DataBase
            Price = 95,
            Price50 = 90,
            Price100 = 85,
-           CategoryId=3,
-           ImageUrl = ""
+           CategoryId=3
        }
    );
             modelBuilder.Entity<Company>().HasData(

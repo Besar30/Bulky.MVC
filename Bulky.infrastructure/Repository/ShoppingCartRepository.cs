@@ -20,7 +20,11 @@ namespace Bulky.infrastructure.Repository
 
         public IEnumerable<ShoppingCart> GetCart(string UserId)
         {
-            return _context.shoppingCarts.Where(x=>x.ApplicationUserId== UserId).Include(x=>x.product).AsEnumerable();
+            return _context.shoppingCarts
+                              .Where(x => x.ApplicationUserId == UserId)
+                              .Include(x => x.product)                     // Include product
+                                  .ThenInclude(p => p.productImages)      // Include all product images
+                              .AsEnumerable();
         }
         public int GetCountCart(string UserId)
         {

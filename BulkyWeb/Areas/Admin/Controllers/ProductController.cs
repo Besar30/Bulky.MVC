@@ -20,7 +20,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> products = _unitOfWork.productRepository.GetAllProduct().ToList();
-
             return View(products);
         }
         public IActionResult Upsert(int? id)
@@ -39,43 +38,43 @@ namespace BulkyWeb.Areas.Admin.Controllers
             return View(productVM);
             else
             {
-                productVM.product=_unitOfWork.productRepository.Get(x=>x.Id==id);
+                productVM.product = _unitOfWork.productRepository.GetProductById(id);
+                productVM.ImagesProduct=_unitOfWork.ImageProductRepository.GetImageProudct(id);
                 return View(productVM);
             }
         }
         [HttpPost]
         public IActionResult Upsert(ProductVM productvm)
         {
-            if (productvm.product.Id == 0 && productvm.Image == null)
+            if (productvm.product.Id == 0 && productvm.Images == null)
             {
-                ModelState.AddModelError("Image", "Please upload an image.");
+                ModelState.AddModelError("product.productImages", "Please upload an image.");
             }
             if (ModelState.IsValid)
             {
-                if (productvm.Image != null&&productvm.product.Id==0)
-                {
-                    string imagePath = SaveImage(productvm.Image, "Product");
-                    productvm.product.ImageUrl = imagePath;
-                }
                 if (productvm.product.Id == 0)
                 {
                     _unitOfWork.productRepository.Add(productvm.product);
                     TempData["success"] = "Product created successfully.";
+                    _unitOfWork.save();
+
+                    if (productvm.Images != null)
+                    {
+                        SaveProductImages(productvm.Images, productvm.product.Id);
+                        _unitOfWork.save();
+                    }
                 }
                 else
                 {
                     Product product = _unitOfWork.productRepository.Get(x => x.Id == productvm.product.Id);
                     productvm.ToEntity(product);
-                    if (productvm.Image != null)
+                    if (productvm.Images != null)
                     {
-                        DeleteImage(product.ImageUrl!, "Product");
-                        string imagePath = SaveImage(productvm.Image, "Product");
-                        product.ImageUrl = imagePath;
+                        SaveProductImages(productvm.Images,product.Id);
                     }
+                    _unitOfWork.save();
                     TempData["success"] = "Product updated successfully.";
                 }
-
-                _unitOfWork.save();
                 return RedirectToAction("Index");
             }
 
@@ -89,6 +88,10 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 product = productvm.product,
                 CategoryList = Categorylist
             };
+            if (productvm.product.Id != 0)
+            {
+                vm.ImagesProduct = _unitOfWork.ImageProductRepository.GetImageProudct(productvm.product.Id);
+            }
             return View("Upsert", vm);
         }
         public IActionResult Delete(int? id)
@@ -112,11 +115,26 @@ namespace BulkyWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            DeleteImage(pro.ImageUrl, "Product");
+            List<ImageProductVM> imageProductVMs = _unitOfWork.ImageProductRepository.GetImageProudct(id);
+            foreach(var item in imageProductVMs)
+            {
+                DeleteImage(item.ImageUrl, $"Product-{id}");
+            }
             _unitOfWork.productRepository.Remove(pro);
             _unitOfWork.save();
             TempData["success"] = "Product deleted successflly.";
             return RedirectToAction("Index");
+        }
+        public IActionResult Deleteimage(int imageId,int productId)
+        {
+            ProductImage productImage = _unitOfWork.ImageProductRepository.Get(x => x.Id == imageId);
+            if (productImage == null) {
+                return RedirectToAction(nameof(Upsert), new { id = productId });
+            }
+            DeleteImage(productImage.ImageUrl, $"Product-{productId}");
+            _unitOfWork.ImageProductRepository.Remove(productImage);
+            _unitOfWork.save();
+            return RedirectToAction(nameof(Upsert), new { id = productId });
         }
         private string SaveImage(IFormFile image,string Section)
         {
@@ -139,7 +157,20 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 System.IO.File.Delete(filePath);
             }
         }
-
+        private void SaveProductImages(IEnumerable<IFormFile> images, int productId)
+        {
+            foreach (var img in images)
+            {
+                string imagePath = SaveImage(img, $"Product-{productId}");
+                ProductImage productImage = new ProductImage
+                {
+                    ProductId = productId,
+                    ImageUrl = imagePath
+                };
+                _unitOfWork.ImageProductRepository.Add(productImage);
+            }
+            _unitOfWork.save();
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

@@ -14,8 +14,10 @@ namespace Bulky.Data.ViewModel
     public class ProductVM
     {
         public Product product { get; set; }
-        public IFormFile? Image {  get; set; }
+        public List<IFormFile>? Images {  get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem>? CategoryList { get; set; }
+        [ValidateNever]
+        public List<ImageProductVM>? ImagesProduct {  get; set; }
     }
 }

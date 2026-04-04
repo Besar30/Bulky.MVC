@@ -26,7 +26,7 @@
                             <div class="row g-0 align-items-center">
                                 <!-- Image -->
                                 <div class="col-md-3 text-center p-3">
-                                    <img src="~/images/Product/@item.product.ImageUrl"
+                                    <img src="~/images/Product-@item.product.Id/@item.product.productImages.FirstOrDefault()?.ImageUrl"
                                          class="img-fluid rounded"
                                          style="max-height:150px; object-fit:contain;" />
                                 </div>
