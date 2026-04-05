@@ -17,9 +17,9 @@ namespace BulkyWeb.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public IActionResult Index()
+        public IActionResult Index(string? searsh)
         {
-            List<Product> products = _unitOfWork.productRepository.GetAllProduct().ToList();
+            List<Product> products = _unitOfWork.productRepository.GetAllProduct(searsh).ToList();
             return View(products);
         }
         public IActionResult Upsert(int? id)
@@ -171,11 +171,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
             _unitOfWork.save();
         }
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            List<Product> products = _unitOfWork.productRepository.GetAllProduct().ToList();
-            return Json(new { data = products });
-        }
+        
     }
 }

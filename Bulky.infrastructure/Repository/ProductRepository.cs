@@ -18,9 +18,10 @@ namespace Bulky.infrastructure.Repository
             _context = context;
         }
 
-        public IEnumerable<Product> GetAllProduct()
+        public IEnumerable<Product> GetAllProduct(string? search)
         {
-            return _context.products
+            
+            return _context.products.Where(p => search == null || p.Title.ToLower().Contains(search.ToLower().Trim()))
                 .Include(p => p.category) // لو عايز تجيب الكاتيجوري
                 .Select(p => new Product
                 {

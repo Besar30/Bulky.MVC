@@ -25,9 +25,9 @@ namespace BulkyWeb.Areas.Customer.Controllers
             _cacheServices = cacheServices;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? search)
         {
-            IEnumerable<Product> products=_unitOfWork.productRepository.GetAllProduct();
+            IEnumerable<Product> products=_unitOfWork.productRepository.GetAllProduct(search);
             return View(products);
         }
         public IActionResult Details(int id)

@@ -9,7 +9,7 @@ namespace Bulky.infrastructure.Repository.IRepository
 {
     public interface IProductRepository:IRepository<Product>
     {
-        IEnumerable<Product> GetAllProduct();
+        IEnumerable<Product> GetAllProduct(string? search);
         Product GetProductById(int? id);
         void Update(Product product);
     }
